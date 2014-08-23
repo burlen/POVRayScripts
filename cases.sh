@@ -2,5 +2,5 @@
 
 for i in `seq 11 36`
 do
-  povray pbbise.ini +K$i +Opbbise-case-$i.png
+  povray pbbise-edison.ini +K$i +Opbbise-case-$i.png
 done

@@ -358,103 +358,106 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 #end
 
 // --------------------------------------------------------------------------
-#declare BoxCAmp = 0.95;
-#declare WhiteVec = <1, 1, 1, 0, 0>;
-#declare BoxFT = <0, 0, 0, 0.0, 0.55>;
-#declare PlaneColor = color rgbft <1,1,1,0,0>;
-#declare BoxColor1 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxCAmp = BoxCAmp + 0.05;
-#declare BoxColor2 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxCAmp = BoxCAmp + 0.05;
-#declare BoxColor3 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxCAmp = BoxCAmp + 0.05;
-#declare BoxColor4 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxCAmp = BoxCAmp + 0.05;
-#declare BoxColor5 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxCAmp = BoxCAmp + 0.05;
-#declare BoxColor6 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxCAmp = BoxCAmp + 0.05;
-#declare BoxColor7 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxCAmp = BoxCAmp + 0.05;
-#declare BoxColor8 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxCAmp = BoxCAmp + 0.05;
-#declare BoxColor9 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxCAmp = BoxCAmp + 0.05;
-#declare BoxColor10 = color rgbft BoxCAmp*WhiteVec+BoxFT;
-#declare BoxFinish = finish { Glossy }
-#declare BoxEdgeColor = Black; //color rgbft <231, 72, 16, 0, 0>/255.0;
-#declare BoxEdgeFinish = finish { ambient 1 diffuse 0 specular 0 };
-#declare BoxEdgeWidth = 0.0625;
-#declare RenderBoxEdges = true;
-#include "boxes-sm.pov"
+#declare RenderBoxes = false;
+#if (RenderBoxes)
+    #declare BoxCAmp = 0.95;
+    #declare WhiteVec = <1, 1, 1, 0, 0>;
+    #declare BoxFT = <0, 0, 0, 0.0, 0.55>;
+    #declare PlaneColor = color rgbft <1,1,1,0,0>;
+    #declare BoxColor1 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxCAmp = BoxCAmp + 0.05;
+    #declare BoxColor2 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxCAmp = BoxCAmp + 0.05;
+    #declare BoxColor3 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxCAmp = BoxCAmp + 0.05;
+    #declare BoxColor4 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxCAmp = BoxCAmp + 0.05;
+    #declare BoxColor5 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxCAmp = BoxCAmp + 0.05;
+    #declare BoxColor6 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxCAmp = BoxCAmp + 0.05;
+    #declare BoxColor7 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxCAmp = BoxCAmp + 0.05;
+    #declare BoxColor8 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxCAmp = BoxCAmp + 0.05;
+    #declare BoxColor9 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxCAmp = BoxCAmp + 0.05;
+    #declare BoxColor10 = color rgbft BoxCAmp*WhiteVec+BoxFT;
+    #declare BoxFinish = finish { Glossy }
+    #declare BoxEdgeColor = Black; //color rgbft <231, 72, 16, 0, 0>/255.0;
+    #declare BoxEdgeFinish = finish { ambient 1 diffuse 0 specular 0 };
+    #declare BoxEdgeWidth = 0.0625;
+    #declare RenderBoxEdges = true;
+    #include "boxes-sm.pov"
 
-#declare BoxDownLightAmp = 0.4;
-#declare BoxCamLightAmp = 0.6;
+    #declare BoxDownLightAmp = 0.4;
+    #declare BoxCamLightAmp = 0.6;
 
-#declare BoxCamLight=light_source {
-    CamPos
-	color <1.000000, 1.000000, 1.000000>*BoxCamLightAmp
-    area_light <100, 0, 0>, <0, 0, 100>, 10, 10
-	parallel
-	point_at -CamPos
-}
-
-#declare BoxDownLight0=light_source {
-    <-10.0, -50.0, 100.0>
-	color <1.000000, 1.000000, 1.000000>*BoxDownLightAmp
-	parallel
-	point_at <0.0, 0.0, 0.0>
-}
-
-#declare BoxDownLight1=light_source {
-    <10.0, -50.0, 100.0>
-	color <1.000000, 1.000000, 1.000000>*BoxDownLightAmp
-	parallel
-	point_at <0.0, 0.0, 0.0>
-}
-
-
-light_group {
-        light_source { BoxDownLight0 }
-        light_source { BoxDownLight1 }
-        //light_source { DownLight1 }
-        light_source { BoxCamLight }
-
-/*
-    object {
-        Boxes
-        translate 20*y
-        //rotate 5*z
-        //rotate 55*z
-        //translate -20*x
+    #declare BoxCamLight=light_source {
+        CamPos
+    	color <1.000000, 1.000000, 1.000000>*BoxCamLightAmp
+        area_light <100, 0, 0>, <0, 0, 100>, 10, 10
+    	parallel
+    	point_at -CamPos
     }
-*/
 
-/*
-    box { <-200, 20, -200> <200, 20.1, 200>
-        texture { pigment { BoxColor9 } finish { BoxFinish } }
-        normal { ripples 1 phase 1 frequency 1 scale 2}
+    #declare BoxDownLight0=light_source {
+        <-10.0, -50.0, 100.0>
+    	color <1.000000, 1.000000, 1.000000>*BoxDownLightAmp
+    	parallel
+    	point_at <0.0, 0.0, 0.0>
     }
-*/
+
+    #declare BoxDownLight1=light_source {
+        <10.0, -50.0, 100.0>
+    	color <1.000000, 1.000000, 1.000000>*BoxDownLightAmp
+    	parallel
+    	point_at <0.0, 0.0, 0.0>
+    }
 
 
-/*    plane {
-        -y 0
-        rotate 55*z
-        translate -20*x
-        texture {
-            //pigment { PlaneColor }
-            pigment { checker pigment{White}, pigment{White*0.5} scale 10}
-            finish { PlaneFinish }
+    light_group {
+            light_source { BoxDownLight0 }
+            light_source { BoxDownLight1 }
+            //light_source { DownLight1 }
+            light_source { BoxCamLight }
+
+    /*
+        object {
+            Boxes
+            translate 20*y
+            //rotate 5*z
+            //rotate 55*z
+            //translate -20*x
         }
+    */
+
+    /*
+        box { <-200, 20, -200> <200, 20.1, 200>
+            texture { pigment { BoxColor9 } finish { BoxFinish } }
+            normal { ripples 1 phase 1 frequency 1 scale 2}
+        }
+    */
+
+
+    /*    plane {
+            -y 0
+            rotate 55*z
+            translate -20*x
+            texture {
+                //pigment { PlaneColor }
+                pigment { checker pigment{White}, pigment{White*0.5} scale 10}
+                finish { PlaneFinish }
+            }
+        }
+        object {
+            Axes
+            rotate 55*z
+            translate -20*x
+        }
+    */
     }
-    object {
-        Axes
-        rotate 55*z
-        translate -20*x
-    }
-*/
-}
+#end
 
 // --------------------------------------------------------------------------
 #declare RenderLUTBg = false;

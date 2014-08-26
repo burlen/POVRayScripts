@@ -13,9 +13,10 @@ global_settings {
 }
 
 #declare run = 0;
+#declare VioletCoordPoly = false;
 #declare SingleBondColor = true;
-#declare RenderCrystalSingle = true;
-#declare RenderCrystalWide = true;
+#declare RenderCrystalSingle = false;
+#declare RenderCrystalWide = false;
 #declare RenderCoordPolySingle = true;
 
 #declare RenderCrystalDeep = false;
@@ -86,14 +87,13 @@ global_settings {
 #declare CamDir = CamPos/vlength(CamPos);
 #declare DomeRot = <degrees(acos(CamDir.y)), degrees(acos(CamDir.z))>;
 
-
 // --------------------------------------------------------------------------
 // background
 #declare MakeMask = false;
 #if (MakeMask)
     background { color White }
 #else
-    #declare BG1 = rgb <215 215 215>/255.0;
+    #declare BG1 = rgb <235 235 235>/255.0;
     #declare BG2 = rgb <30 30 30>/255.0;
     sky_sphere {
     pigment {
@@ -300,7 +300,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
         diffuse 0.0001
         specular 1
         roughness 0.001
-        reflection { 0.00125 falloff 8 }
+        reflection { 0.25 falloff 8 }
         }
 
     #declare CoordPolySingleF=0.4;
@@ -308,8 +308,15 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 //    #declare CoordPolySingleColor1 = color rgbft <0.000000, 0.741176, 0.945098, CoordPolySingleF, CoordPolySingleT>;
 //    #declare CoordPolySingleColor1 = color rgbft <170/255, 211/255, 255/255, CoordPolySingleF, CoordPolySingleT>;
 //    #declare CoordPolySingleColor1 = color rgbft <45/255, 82/255, 135/255, CoordPolySingleF, CoordPolySingleT>;
-    #declare CoordPolySingleColor1 = color rgbft <97/255, 130/255, 207/255, CoordPolySingleF, CoordPolySingleT>;
-    #declare CoordPolySingleColor2 = color rgbft <0.000000, 0.647059, 1.000000, CoordPolySingleF, CoordPolySingleT>;
+
+    #if (VioletCoordPoly)
+        #declare CoordPolySingleColor1 = color rgbft <97/255, 130/255, 207/255, CoordPolySingleF, CoordPolySingleT>;
+        #declare CoordPolySingleColor2 = color rgbft <97/255, 130/255, 207/255, CoordPolySingleF, CoordPolySingleT>;
+    #else
+        #declare CoordPolySingleColor1 = color rgbft <0.000000, 0.647059, 1.000000, CoordPolySingleF, CoordPolySingleT>;
+        #declare CoordPolySingleColor2 = color rgbft <0.000000, 0.647059, 1.000000, CoordPolySingleF, CoordPolySingleT>;
+    #end
+
 
     #include "./data/geom.pov"
     light_group {
@@ -322,7 +329,6 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
             CoordPolySingle
             no_shadow
             Center_Trans(SingleCrystal, x+y+z)
-            texture { finish { CoordPolySingleFinish } }
         }
     }
 #end
@@ -500,7 +506,7 @@ camera {
 	angle HViewAngle
     look_at CamAt
     //focal_point <0,Mn.y,0>
-    //aperture 0.4
+    //aperture 0.5
     //blur_samples 100
     //variance 1/10000
 }

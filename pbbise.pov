@@ -26,7 +26,8 @@ global_settings {
 
 // set clock by +KX on command line
 // or clock=X
-/*#if (clock < 5)
+/*#declare run = 0;
+#if (clock < 5)
     #declare run = clock;
     #declare R1 = 62;
     #declare HViewAngle = 50;
@@ -184,6 +185,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 #declare SingleCrystalAtomColor34=rgbft <0.85098, 0, 0, 0, 0>; // Se
 #declare SingleCrystalAtomColor82=rgbft <26, 97, 241, 0, 0>/255.0; // Pb
 //#declare SingleCrystalAtomColor82=rgbft <0, 0.529412, 0.894118, 0, 0>; // Pb
+
 #declare SingleCrystalAtom83Scaling=1.05;
 #declare SingleCrystalAtom34Scaling=0.95;
 #declare SingleCrystalAtom82Scaling=1.1;
@@ -450,6 +452,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 
     //#include "./data/geom.pov"
     #include "./data/geom-subdiv.pov"
+
     light_group {
 
         //sphere { Cen, 0.75 texture { DLTex } }

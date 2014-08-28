@@ -486,6 +486,8 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
         }
     }
 #end
+
+// --------------------------------------------------------------------------
 #if (RenderCoordPolyDeep)
     #declare CoordPolyDeepR=1.0;
     #declare CoordPolyDeepG=1.0;

@@ -13,16 +13,15 @@ global_settings {
 }
 
 #declare run = 0;
-#declare VioletCoordPoly = false;
 #declare SingleBondColor = true;
-#declare RenderCrystalSingle = false;
+#declare RenderCrystalSingle = true;
 #declare RenderCrystalWide = false;
 #declare RenderCoordPolySingle = true;
 
 #declare RenderCrystalDeep = false;
 #declare RenderCoordPolyDeep = false;
 
-#declare R1 = 40;
+#declare R1 = 41;
 #declare HViewAngle = 40;
 
 // set clock by +KX on command line
@@ -145,11 +144,13 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 
 #declare CamLight2=light_source {
     -CamPos
-	color <1.000000, 1.000000, 1.000000>*2.0000000
+    color <1.000000, 1.000000, 1.000000>*2.0000000
     area_light <100, 0, 0>, <0, 0, 100>, 10, 10
-	parallel
-	point_at CamPos
+    parallel
+    point_at CamPos
 }
+
+
 #declare DownLightAmp=1.5;
 #declare DownLight0=light_source {
     <0.0, 100.0, 100.0>
@@ -164,6 +165,16 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 	parallel
 	point_at <0.0, 0.0, 0.0>
 }
+
+#declare DownLight2=light_source {
+    <0.0, 100.0, 100.0>
+	color <1.000000, 1.000000, 1.000000>*DownLightAmp
+	parallel
+	point_at <0.0, 0.0, 0.0>
+}
+
+
+
 
 // --------------------------------------------------------------------------
 //#declare SingleCrystalBondColor=rgbft <1, 1, 1, 0, 0>;
@@ -227,6 +238,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 
 // --------------------------------------------------------------------------
 #if (RenderCrystalWide)
+    #declare WideCrystalPos = 41
     #declare WideCrystalBondColor = P_Chrome4;
     #declare WideCrystalAtomColor83=rgbft <0.0392157, 0.776471, 1, 0, 0>; // Bi
     #declare WideCrystalAtomColor34=rgbft <0.85098, 0, 0, 0, 0>; // Se
@@ -245,7 +257,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
         object {
             WideCrystal
             Center_Trans(SingleCrystal, x+y+z)
-            translate y*4.2619*clock
+            translate y*4.2619*WideCrystalPos
             no_shadow
         }
     }
@@ -295,13 +307,103 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 // --------------------------------------------------------------------------
 #if (RenderCoordPolySingle)
 
-    #declare CoordPolySingleFinish=finish {
-        ambient 0.3
-        diffuse 0.0001
-        specular 1
-        roughness 0.001
-        reflection { 0.25 falloff 8 }
+    //#declare Cen = (Mn + Mx)/2.0;
+    #declare Cen = <0.0, 0.0, 0.0>;
+
+    #declare LightX =  12.0;
+    #declare LightY = -50.0;
+    #declare LightZ =  2;
+
+    #declare DL3Pos = Cen +  x*LightX + y*LightY +  z*LightZ;
+    #declare DL4Pos = Cen + -x*LightX + y*LightY +  z*LightZ;
+    #declare DL5Pos = Cen +  x*LightX + y*LightY + -z*LightZ;
+    #declare DL6Pos = Cen + -x*LightX + y*LightY + -z*LightZ;
+
+    #declare DLTex = texture { pigment { color  Red } finish { ambient 1 } }
+
+
+    #declare CamLight22=light_source {
+        CamPos
+    	color <1.000000, 1.000000, 1.000000>*4.0000000
+        area_light <100, 0, 0>, <0, 0, 100>, 10, 10
+    	parallel
+        //otlight
+    	point_at -CamPos
+    }
+
+    #declare DownLightAmp2=1.05;
+    #declare DownLight11=light_source {
+        <0.0, -100.0, 100.0>
+    	color White*DownLightAmp2
+    	parallel
+    	point_at <0.0, 0.0, 0.0>
+    }
+
+    #declare DownLight22=light_source {
+        <0.0, 100.0, 100.0>
+    	color White*DownLightAmp2
+    	parallel
+    	point_at <0.0, 0.0, 0.0>
+    }
+
+    #declare DownLight3=light_source {
+      DL3Pos
+    	color White*DownLightAmp2
+    	parallel
+    	point_at Cen
+    }
+
+    #declare DownLight4=light_source {
+      DL4Pos
+    	color White*DownLightAmp2
+    	parallel
+    	point_at Cen
+    }
+
+    #declare DownLight5=light_source {
+      DL5Pos
+    	color White*DownLightAmp2
+    	parallel
+    	point_at Cen
+    }
+
+    #declare DownLight6=light_source {
+      DL6Pos
+    	color White*DownLightAmp2
+    	parallel
+    	point_at Cen
+    }
+
+    #declare Pos = Cen-4.25*x-2.5*y;
+
+    #declare DownLight7=light_source {
+        Pos
+    	color White*3.0
+        looks_like {
+            sphere { Pos, 0.75 texture { DLTex } }
         }
+    }
+    #declare DownLight8=light_source {
+        -y*8
+    	color White*5.0
+    	parallel
+        //spotlight radius 65 falloff 70
+        point_at Cen
+        //rotate -16*z
+        //rotate clock*x
+        //translate clock*x
+    }
+
+
+/*    #declare CoordPolySingleFinish=finish {
+        ambient 0.3
+        diffuse 0.1
+        specular 1
+        roughness 0.04
+        //reflection { 0.25 falloff 8 }
+        irid { 0.35 }
+        } */
+    #declare CoordPolySingleFinish=finish { ambient 0.05 specular 0.15 roughness 0.008 irid { 0.2 } }
 
     #declare CoordPolySingleF=0.4;
     #declare CoordPolySingleT=0.1;
@@ -309,6 +411,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 //    #declare CoordPolySingleColor1 = color rgbft <170/255, 211/255, 255/255, CoordPolySingleF, CoordPolySingleT>;
 //    #declare CoordPolySingleColor1 = color rgbft <45/255, 82/255, 135/255, CoordPolySingleF, CoordPolySingleT>;
 
+    #declare VioletCoordPoly = false;
     #if (VioletCoordPoly)
         #declare CoordPolySingleColor1 = color rgbft <97/255, 130/255, 207/255, CoordPolySingleF, CoordPolySingleT>;
         #declare CoordPolySingleColor2 = color rgbft <97/255, 130/255, 207/255, CoordPolySingleF, CoordPolySingleT>;
@@ -317,12 +420,32 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
         #declare CoordPolySingleColor2 = color rgbft <0.000000, 0.647059, 1.000000, CoordPolySingleF, CoordPolySingleT>;
     #end
 
-
-    #include "./data/geom.pov"
+    //#include "./data/geom.pov"
+    #include "./data/geom-subdiv.pov"
     light_group {
 
-        light_source { DownLight0 }
-        light_source { DownLight1 }
+        //sphere { Cen, 0.75 texture { DLTex } }
+        //light_source { DownLight3 } // sphere { DL3Pos, 0.75 texture { DLTex } }
+        //light_source { DownLight4 } // sphere { DL4Pos, 0.75 texture { DLTex } }
+        //light_source { DownLight5 } // sphere { DL5Pos, 0.75 texture { DLTex } }
+        //light_source { DownLight6 } // sphere { DL6Pos, 0.75 texture { DLTex } }
+        //light_source { CamLight2 }
+        //light_source { DownLight7 }
+        //light_source { DownLight8 }
+
+        #declare id = -15;
+        #while (id < 15)
+            #declare Pos = Cen-id*x-0.0;
+            light_source {
+                Pos
+            	color Blue*0.9
+                //looks_like { sphere { Pos, 0.75 texture { DLTex } } }
+            }
+            #declare id = id+5;
+        #end
+
+        light_source { DownLight11 }
+        //light_source { DownLight2 }
         light_source { CamLight }
 
         object {

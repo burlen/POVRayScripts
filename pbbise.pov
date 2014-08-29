@@ -15,7 +15,7 @@ global_settings {
 #declare run = 0;
 #declare SingleBondColor = true;
 #declare RenderCrystalSingle = true;
-#declare RenderCrystalWide = false;
+#declare RenderCrystalWide = true;
 #declare RenderCoordPolySingle = true;
 
 #declare RenderCrystalDeep = false;
@@ -92,7 +92,7 @@ global_settings {
 #if (MakeMask)
     background { color White }
 #else
-    #declare BG1 = rgb <235 235 235>/255.0;
+    #declare BG1 = rgb <255 245 245>/255.0;
     #declare BG2 = rgb <30 30 30>/255.0;
     sky_sphere {
     pigment {
@@ -184,8 +184,10 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 #declare SingleCrystalAtomColor34=rgbft <0.85098, 0, 0, 0, 0>; // Se
 #declare SingleCrystalAtomColor82=rgbft <26, 97, 241, 0, 0>/255.0; // Pb
 //#declare SingleCrystalAtomColor82=rgbft <0, 0.529412, 0.894118, 0, 0>; // Pb
-#declare SingleCrystalSphereScaling=1.0;
-#declare SingleCrystalCylinderScaling=1.0;
+#declare SingleCrystalAtom83Scaling=1.05;
+#declare SingleCrystalAtom34Scaling=0.95;
+#declare SingleCrystalAtom82Scaling=1.1;
+#declare SingleCrystalCylinderScaling=0.85;
 
 #declare SingleCrystalAtomFinish=finish { F_MetalB }
 /*#declare SingleCrystalAtomFinish=finish {
@@ -207,13 +209,13 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 
 #if (RenderCoordPolySingle)
     #if (SingleBondColor)
-        #include "./data/mol.pov"
+        #include "./data/mol++.pov"
     #else
         #include "./data/mol-abonds.pov"
     #end
 #else
     #if (SingleBondColor)
-        #include "./data/just-mol.pov"
+        #include "./data/just-mol++.pov"
     #else
         #include "./data/just-mol-abonds.pov"
     #end
@@ -238,21 +240,47 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 
 // --------------------------------------------------------------------------
 #if (RenderCrystalWide)
-    #declare WideCrystalPos = 41
+
+    #declare CamLight333=light_source {
+        CamPos
+    	color White*1.0
+        area_light <100, 0, 0>, <0, 0, 100>, 10, 10
+    	parallel
+    	point_at -CamPos
+    }
+
+    #declare DownLightAmp3=1.75;
+    #declare DownLight000=light_source {
+        <0.0, 100.0, 100.0>
+    	color <1.000000, 1.000000, 1.000000>*DownLightAmp3
+    	parallel
+    	point_at <0.0, 0.0, 0.0>
+    }
+
+    #declare DownLight111=light_source {
+        <0.0, -100.0, 100.0>
+    	color <1.000000, 1.000000, 1.000000>*DownLightAmp3
+    	parallel
+    	point_at <0.0, 0.0, 0.0>
+    }
+
+    #declare WideCrystalPos = clock;
     #declare WideCrystalBondColor = P_Chrome4;
     #declare WideCrystalAtomColor83=rgbft <0.0392157, 0.776471, 1, 0, 0>; // Bi
     #declare WideCrystalAtomColor34=rgbft <0.85098, 0, 0, 0, 0>; // Se
     #declare WideCrystalAtomColor82=rgbft <26, 97, 241, 0, 0>/255.0; // Pb
-    #declare WideCrystalSphereScaling=1.0;
-    #declare WideCrystalCylinderScaling=1.0;
+    #declare WideCrystalAtom83Scaling=1.05;
+    #declare WideCrystalAtom34Scaling=0.95;
+    #declare WideCrystalAtom82Scaling=1.1;
+    #declare WideCrystalCylinderScaling=1.1;
     #declare WideCrystalAtomFinish=finish { F_MetalB }
     #declare WideCrystalBondFinish=finish { F_MetalD }
 
-    #include "./data/mol-wide.pov"
+    #include "./data/mol-wide++.pov"
     light_group {
-        light_source { DownLight0 }
-        light_source { DownLight1 }
-        light_source { CamLight }
+        light_source { DownLight000 }
+        light_source { DownLight111 }
+        light_source { CamLight333 }
         light_source { CamLight2 }
         object {
             WideCrystal

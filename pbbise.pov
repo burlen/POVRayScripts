@@ -361,7 +361,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
     	point_at -CamPos
     }
 
-    #declare DownLightAmp2=1.05;
+    #declare DownLightAmp2=0.8;
     #declare DownLight11=light_source {
         <0.0, -100.0, 100.0>
     	color White*DownLightAmp2
@@ -376,53 +376,6 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
     	point_at <0.0, 0.0, 0.0>
     }
 
-    #declare DownLight3=light_source {
-      DL3Pos
-    	color White*DownLightAmp2
-    	parallel
-    	point_at Cen
-    }
-
-    #declare DownLight4=light_source {
-      DL4Pos
-    	color White*DownLightAmp2
-    	parallel
-    	point_at Cen
-    }
-
-    #declare DownLight5=light_source {
-      DL5Pos
-    	color White*DownLightAmp2
-    	parallel
-    	point_at Cen
-    }
-
-    #declare DownLight6=light_source {
-      DL6Pos
-    	color White*DownLightAmp2
-    	parallel
-    	point_at Cen
-    }
-
-    #declare Pos = Cen-4.25*x-2.5*y;
-
-    #declare DownLight7=light_source {
-        Pos
-    	color White*3.0
-        looks_like {
-            sphere { Pos, 0.75 texture { DLTex } }
-        }
-    }
-    #declare DownLight8=light_source {
-        -y*8
-    	color White*5.0
-    	parallel
-        //spotlight radius 65 falloff 70
-        point_at Cen
-        //rotate -16*z
-        //rotate clock*x
-        //translate clock*x
-    }
 
 
 /*    #declare CoordPolySingleFinish=finish {
@@ -433,7 +386,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
         //reflection { 0.25 falloff 8 }
         irid { 0.35 }
         } */
-    #declare CoordPolySingleFinish=finish { ambient 0.05 specular 0.15 roughness 0.008 irid { 0.2 } }
+    #declare CoordPolySingleFinish=finish { ambient 0.05 specular 0.35 roughness 0.008 irid { 0.1 } }
 
     #declare CoordPolySingleF=0.4;
     #declare CoordPolySingleT=0.1;
@@ -464,19 +417,23 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
         //light_source { DownLight7 }
         //light_source { DownLight8 }
 
+        //#declare SuplLightColor = color rgb <64,0,255>/255.0; purple
+        //#declare SuplLightColor = color rgb <97/255, 130/255, 207/255>;
+        #declare SuplLightColor = Blue;
+
         #declare id = -15;
         #while (id < 15)
             #declare Pos = Cen-id*x-0.0;
             light_source {
                 Pos
-            	color Blue*0.9
+            	color SuplLightColor*0.2
                 //looks_like { sphere { Pos, 0.75 texture { DLTex } } }
             }
             #declare id = id+5;
         #end
 
         light_source { DownLight11 }
-        //light_source { DownLight2 }
+        //light_source { DownLight22 }
         light_source { CamLight }
 
         object {

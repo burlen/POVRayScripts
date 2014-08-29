@@ -266,7 +266,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
     	point_at <0.0, 0.0, 0.0>
     }
 
-    #declare WideCrystalPos = clock;
+    #declare WideCrystalPos = 41.375;
     #declare WideCrystalBondColor = P_Chrome4;
     #declare WideCrystalAtomColor83=rgbft <0.0392157, 0.776471, 1, 0, 0>; // Bi
     #declare WideCrystalAtomColor34=rgbft <0.85098, 0, 0, 0, 0>; // Se
@@ -618,8 +618,8 @@ camera {
 	right CamRight*Aspect
 	angle HViewAngle
     look_at CamAt
-    //focal_point <0,Mn.y,0>
-    //aperture 0.5
-    //blur_samples 100
-    //variance 1/10000
+    focal_point <0,Mn.y,0>
+    aperture clock // 0.4
+    blur_samples 100
+    variance 1/10000
 }

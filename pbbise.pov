@@ -12,7 +12,7 @@ global_settings {
     assumed_gamma 2
 }
 
-#declare run = 0;
+#declare UseFocalBlur = false;
 #declare SingleBondColor = true;
 #declare RenderCrystalSingle = true;
 #declare RenderCrystalWide = true;
@@ -186,12 +186,17 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 #declare SingleCrystalAtomColor82=rgbft <26, 97, 241, 0, 0>/255.0; // Pb
 //#declare SingleCrystalAtomColor82=rgbft <0, 0.529412, 0.894118, 0, 0>; // Pb
 
+
 #declare SingleCrystalAtom83Scaling=1.05;
 #declare SingleCrystalAtom34Scaling=0.95;
 #declare SingleCrystalAtom82Scaling=1.1;
 #declare SingleCrystalCylinderScaling=0.85;
 
+
+
 #declare SingleCrystalAtomFinish=finish { F_MetalB }
+#declare SingleCrystalBondFinish=finish { F_MetalD }
+
 /*#declare SingleCrystalAtomFinish=finish {
     ambient 0.1
     diffuse 0.55
@@ -200,7 +205,6 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
     // reflection { 0.45 metallic }
 }*/
 
-#declare SingleCrystalBondFinish=finish { F_MetalD }
 /*#declare SingleCrystalBondFinish=finish {
     ambient 0.15
     diffuse 0.6
@@ -216,6 +220,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
         #include "./data/mol-abonds.pov"
     #end
 #else
+    #declare SingleCrystalSphereScaling=1.0;
     #if (SingleBondColor)
         #include "./data/just-mol++.pov"
     #else
@@ -340,17 +345,7 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
     //#declare Cen = (Mn + Mx)/2.0;
     #declare Cen = <0.0, 0.0, 0.0>;
 
-    #declare LightX =  12.0;
-    #declare LightY = -50.0;
-    #declare LightZ =  2;
-
-    #declare DL3Pos = Cen +  x*LightX + y*LightY +  z*LightZ;
-    #declare DL4Pos = Cen + -x*LightX + y*LightY +  z*LightZ;
-    #declare DL5Pos = Cen +  x*LightX + y*LightY + -z*LightZ;
-    #declare DL6Pos = Cen + -x*LightX + y*LightY + -z*LightZ;
-
     #declare DLTex = texture { pigment { color  Red } finish { ambient 1 } }
-
 
     #declare CamLight22=light_source {
         CamPos
@@ -376,23 +371,16 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
     	point_at <0.0, 0.0, 0.0>
     }
 
-
-
-/*    #declare CoordPolySingleFinish=finish {
-        ambient 0.3
-        diffuse 0.1
-        specular 1
-        roughness 0.04
-        //reflection { 0.25 falloff 8 }
-        irid { 0.35 }
-        } */
-    #declare CoordPolySingleFinish=finish { ambient 0.05 specular 0.35 roughness 0.008 irid { 0.1 } }
+    #declare CoordPolySingleDefaultFinish = false;
+    #if (CoordPolySingleDefaultFinish)
+        #declare CoordPolySingleFinish = finish {  }
+    #else
+        //#declare CoordPolySingleFinish = finish { ambient 0.05 specular 0.35 roughness 0.008 irid { 0.1 } }
+        #declare CoordPolySingleFinish = finish { ambient 0.05 specular 0.15 roughness 0.008 irid { 0.0 } }
+    #end
 
     #declare CoordPolySingleF=0.4;
     #declare CoordPolySingleT=0.1;
-//    #declare CoordPolySingleColor1 = color rgbft <0.000000, 0.741176, 0.945098, CoordPolySingleF, CoordPolySingleT>;
-//    #declare CoordPolySingleColor1 = color rgbft <170/255, 211/255, 255/255, CoordPolySingleF, CoordPolySingleT>;
-//    #declare CoordPolySingleColor1 = color rgbft <45/255, 82/255, 135/255, CoordPolySingleF, CoordPolySingleT>;
 
     #declare VioletCoordPoly = false;
     #if (VioletCoordPoly)
@@ -408,25 +396,15 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 
     light_group {
 
-        //sphere { Cen, 0.75 texture { DLTex } }
-        //light_source { DownLight3 } // sphere { DL3Pos, 0.75 texture { DLTex } }
-        //light_source { DownLight4 } // sphere { DL4Pos, 0.75 texture { DLTex } }
-        //light_source { DownLight5 } // sphere { DL5Pos, 0.75 texture { DLTex } }
-        //light_source { DownLight6 } // sphere { DL6Pos, 0.75 texture { DLTex } }
-        //light_source { CamLight2 }
-        //light_source { DownLight7 }
-        //light_source { DownLight8 }
-
-        //#declare SuplLightColor = color rgb <64,0,255>/255.0; purple
-        //#declare SuplLightColor = color rgb <97/255, 130/255, 207/255>;
         #declare SuplLightColor = Blue;
+        #declare SupLightAmp = 0.075;
 
         #declare id = -15;
         #while (id < 15)
             #declare Pos = Cen-id*x-0.0;
             light_source {
                 Pos
-            	color SuplLightColor*0.2
+            	color SuplLightColor*SupLightAmp
                 //looks_like { sphere { Pos, 0.75 texture { DLTex } } }
             }
             #declare id = id+5;
@@ -611,15 +589,26 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 
 // --------------------------------------------------------------------------
 // camera
-camera {
-    perspective
-    location CamPos
-    sky CamUp
-	right CamRight*Aspect
-	angle HViewAngle
-    look_at CamAt
-    focal_point <0,Mn.y,0>
-    aperture clock // 0.4
-    blur_samples 100
-    variance 1/10000
-}
+#if (UseFocalBlur)
+    camera {
+        perspective
+        location CamPos
+        sky CamUp
+    	right CamRight*Aspect
+    	angle HViewAngle
+        look_at CamAt
+        focal_point <0,Mn.y,0>
+        aperture 0.3125
+        blur_samples 100
+        variance 1/10000
+    }
+#else
+    camera {
+        perspective
+        location CamPos
+        sky CamUp
+    	right CamRight*Aspect
+    	angle HViewAngle
+        look_at CamAt
+    }
+#end

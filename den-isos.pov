@@ -1,4 +1,5 @@
 #version 3.7;
+
 global_settings {
   assumed_gamma 1.0
 }
@@ -41,10 +42,14 @@ global_settings {
 #declare Stars = true;
 #declare Earth = true;
 #declare Iso = true;
-#declare IsoOpaque = true;
+#declare IsoOpaque = false;
 #declare Moon = true;
-#declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/";
 #declare SunPos = <0,0,-2000>;
+/* dresden
+#declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/";
+*/
+/* edison */
+#declare DataRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-all/0001-pov3-nn";
 
 /*
  * set the camera angle and data time based on

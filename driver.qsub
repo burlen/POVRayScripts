@@ -1,0 +1,13 @@
+#PBS -S /bin/bash
+#PBS -j eo
+#PBS -V
+
+#qsub -V -A mpccc -q regular -l walltime=01:30:00 -l mppwidth=14064 driver.qsub
+
+cd $PBS_O_WORKDIR
+
+module load python
+module load mpi4py
+module load povray/3.7.1
+
+aprun -b -n 1172 -N 2 -S 1 -d 1 -j 2 -cc numa_node python-mpi driver.py

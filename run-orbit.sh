@@ -1,6 +1,6 @@
 #!/bin/bash
 
-od=orbit-8
+od=orbit-9
 
 nsteps=1150
 npar=23
@@ -8,7 +8,7 @@ let npar1=npar-1
 let wid=nsteps/npar
 let wid1=wid-1
 
-for i in `seq 0 $wid`
+for i in `seq 0 $wid1`
 do
   for j in `seq 0 $npar1`
   do

@@ -33,24 +33,31 @@ global_settings {
  * Shperical to Cartesian coordinate conversion. Theta_ is the
  * inclination (rotation about y axis in x-z plane).
  */
-#macro Cart(R_, Theta_, Phi_)
+#macro CartXYZ(R_, Theta_, Phi_)
  <R_*sin(Theta_)*cos(Phi_), R_*sin(Theta_)*sin(Phi_), R_*cos(Theta_)>
+#end
+/*
+ * same but this flips negates z coords so the orbit stays always
+ * on the day side
+ */
+#macro CartXYmZ(R_, Theta_, Phi_)
+ <R_*sin(Theta_)*cos(Phi_), R_*sin(Theta_)*sin(Phi_), -R_*cos(Theta_)>
 #end
 
 #declare HiQ = true;
 #declare Atmosph = false;
 #declare Stars = true;
 #declare Earth = true;
-#declare Iso = true;
-#declare IsoOpaque = false;
+#declare Iso = false;
+#declare IsoOpaque = true;
 #declare Moon = true;
 #declare SunPos = <0,0,-2000>;
-/* dresden
+/* dresden */
 #declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/";
-*/
-/* edison */
-#declare DataRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-all/0001-pov3-nn";
 
+/* edison
+#declare DataRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-all/0001-pov3-nn";
+*/
 /*
  * set the camera angle and data time based on
  * the clock variable to move through the
@@ -62,15 +69,34 @@ global_settings {
   #macro CamRadius(Theta_)
     ArchSpiralR(Theta_)
   #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
   // no data
   #declare DataTime = -1;
 #end
 
-#if ((clock > 100) & (clock <= 700))
+#if ((clock > 100) & (clock <= 500))
   // archimedian orbit
   #declare CamClock = clock - 100;
   #macro CamRadius(Theta_)
     ArchSpiralR(Theta_)
+  #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
+  // data advances 1:3
+  #declare DataTime = int((clock-400)/3);
+#end
+
+#if ((clock > 500) & (clock <= 700))
+  // archimedian orbit
+  #declare CamClock = clock - 100;
+  #macro CamRadius(Theta_)
+    ArchSpiralR(Theta_)
+  #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYmZ(R_, Theta_, Phi_)
   #end
   // data advances 1:3
   #declare DataTime = int((clock-400)/3);
@@ -82,6 +108,9 @@ global_settings {
   #macro CamRadius(Theta_)
     ArchSpiralR(Theta_)
   #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
   // data advance 1:3
   #declare DataTime = int((clock-400)/3);
 #end
@@ -91,6 +120,9 @@ global_settings {
   #declare CamClock = clock - 160;
   #macro CamRadius(Theta_)
     CircleR(Theta_)
+  #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
   #end
   // data stopped
   #declare DataTime = 120;
@@ -102,6 +134,9 @@ global_settings {
   #macro CamRadius(Theta_)
     CircleR(Theta_)
   #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
   // data advances 1:3
   #declare DataTime = int((clock-600)/3);
 #end
@@ -112,6 +147,9 @@ global_settings {
   #macro CamRadius(Theta_)
     CircleR(Theta_)
   #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
   // data stopped
   #declare DataTime = 150;
 #end
@@ -119,7 +157,7 @@ global_settings {
 
 #declare CamDelta = PI/200.0;
 #declare CamTheta = PI/2.0 + CamClock*CamDelta;
-#declare CamPos = Cart(CamRadius(CamTheta), CamTheta, 0);
+#declare CamPos = CamPosition(CamRadius(CamTheta), CamTheta, 0);
 #declare CamAngle = 60;
 
 #declare FileName = concat(concat(DataRoot, concat("den-iso-",str(DataTime,-4,0)), "-0001.pov"))
@@ -324,9 +362,9 @@ camera {
   #declare NeonRed = rgbft <230/255.0, 2/255.0, 63/255.0, IsoF, IsoT>;
   #declare AroraYellow = rgb <222/255.0 198/255.0 92/255.0>;
 
-  #declare IsoColor = AroraGreen; // NeonRed;
+  #declare IsoColor = NeonRed;//AroraGreen; // 
   #declare BackLightColor = AroraYellow;
-  #declare BackLightPos = -vnormalize(CamPos)*2000.0; //Cart(2000, 0, 0);
+  #declare BackLightPos = -vnormalize(CamPos)*2000.0;
   #declare BackLightAt = CamPos;
   #declare IsoLightAmp1 = 0.25;
   #declare IsoLightAmp2 = 0.45;

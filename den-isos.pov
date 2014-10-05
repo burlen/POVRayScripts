@@ -37,13 +37,14 @@ global_settings {
  <R_*sin(Theta_)*cos(Phi_), R_*sin(Theta_)*sin(Phi_), R_*cos(Theta_)>
 #end
 /*
- * same but this flips negates z coords so the orbit stays always
+ * same but this negates z coords so the orbit stays always
  * on the day side
  */
 #macro CartXYmZ(R_, Theta_, Phi_)
  <R_*sin(Theta_)*cos(Phi_), R_*sin(Theta_)*sin(Phi_), -R_*cos(Theta_)>
 #end
 
+#declare DaysideCamera = true;
 #declare HiQ = true;
 #declare Atmosph = false;
 #declare Stars = true;
@@ -58,6 +59,7 @@ global_settings {
 /* edison
 #declare DataRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-all/0001-pov3-nn";
 */
+
 /*
  * set the camera angle and data time based on
  * the clock variable to move through the
@@ -95,8 +97,14 @@ global_settings {
   #macro CamRadius(Theta_)
     ArchSpiralR(Theta_)
   #end
-  #macro CamPosition(R_, Theta_, Phi_)
-    CartXYmZ(R_, Theta_, Phi_)
+  #if (DaysideCamera)
+    #macro CamPosition(R_, Theta_, Phi_)
+      CartXYmZ(R_, Theta_, Phi_)
+    #end
+  #else
+    #macro CamPosition(R_, Theta_, Phi_)
+      CartXYZ(R_, Theta_, Phi_)
+    #end
   #end
   // data advances 1:3
   #declare DataTime = int((clock-400)/3);
@@ -362,7 +370,7 @@ camera {
   #declare NeonRed = rgbft <230/255.0, 2/255.0, 63/255.0, IsoF, IsoT>;
   #declare AroraYellow = rgb <222/255.0 198/255.0 92/255.0>;
 
-  #declare IsoColor = NeonRed;//AroraGreen; // 
+  #declare IsoColor = AroraGreen; // NeonRed; //
   #declare BackLightColor = AroraYellow;
   #declare BackLightPos = -vnormalize(CamPos)*2000.0;
   #declare BackLightAt = CamPos;

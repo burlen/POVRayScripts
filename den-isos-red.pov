@@ -37,6 +37,7 @@ global_settings {
  <R_*sin(Theta_)*cos(Phi_), R_*sin(Theta_)*sin(Phi_), R_*cos(Theta_)>
 #end
 
+#declare DaysideCamera = true;
 #declare HiQ = true;
 #declare Atmosph = false;
 #declare Stars = true;
@@ -51,6 +52,7 @@ global_settings {
 /* edison */
 #declare DataRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-all/0001-pov3-nn/";
 #declare ScriptRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-povray/";
+
 /*
  * set the camera angle and data time based on
  * the clock variable to move through the
@@ -62,15 +64,40 @@ global_settings {
   #macro CamRadius(Theta_)
     ArchSpiralR(Theta_)
   #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
   // no data
   #declare DataTime = -1;
 #end
 
-#if ((clock > 100) & (clock <= 700))
+#if ((clock > 100) & (clock <= 500))
   // archimedian orbit
   #declare CamClock = clock - 100;
   #macro CamRadius(Theta_)
     ArchSpiralR(Theta_)
+  #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
+  // data advances 1:3
+  #declare DataTime = int((clock-400)/3);
+#end
+
+#if ((clock > 500) & (clock <= 700))
+  // archimedian orbit
+  #declare CamClock = clock - 100;
+  #macro CamRadius(Theta_)
+    ArchSpiralR(Theta_)
+  #end
+  #if (DaysideCamera)
+    #macro CamPosition(R_, Theta_, Phi_)
+      CartXYmZ(R_, Theta_, Phi_)
+    #end
+  #else
+    #macro CamPosition(R_, Theta_, Phi_)
+      CartXYZ(R_, Theta_, Phi_)
+    #end
   #end
   // data advances 1:3
   #declare DataTime = int((clock-400)/3);
@@ -82,6 +109,9 @@ global_settings {
   #macro CamRadius(Theta_)
     ArchSpiralR(Theta_)
   #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
   // data advance 1:3
   #declare DataTime = int((clock-400)/3);
 #end
@@ -91,6 +121,9 @@ global_settings {
   #declare CamClock = clock - 160;
   #macro CamRadius(Theta_)
     CircleR(Theta_)
+  #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
   #end
   // data stopped
   #declare DataTime = 120;
@@ -102,6 +135,9 @@ global_settings {
   #macro CamRadius(Theta_)
     CircleR(Theta_)
   #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
   // data advances 1:3
   #declare DataTime = int((clock-600)/3);
 #end
@@ -112,6 +148,9 @@ global_settings {
   #macro CamRadius(Theta_)
     CircleR(Theta_)
   #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
   // data stopped
   #declare DataTime = 150;
 #end
@@ -119,11 +158,12 @@ global_settings {
 
 #declare CamDelta = PI/200.0;
 #declare CamTheta = PI/2.0 + CamClock*CamDelta;
-#declare CamPos = Cart(CamRadius(CamTheta), CamTheta, 0);
+#declare CamPos = CamPosition(CamRadius(CamTheta), CamTheta, 0);
 #declare CamAngle = 60;
 
 #declare FileName = concat(concat(DataRoot, concat("den-iso-",str(DataTime,-4,0)), "-0001.pov"))
 
+/*
 #warning "---------------------------"
 #warning concat("clock=",str(clock,0,4),"\n")
 #warning concat("CamDelta=",str(CamDelta,0,4),"\n")
@@ -132,6 +172,7 @@ global_settings {
 #warning concat("DataTime=", str(DataTime,0,0))
 #warning concat("FileName=", FileName)
 #warning "---------------------------"
+*/
 
 camera {
   perspective

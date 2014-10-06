@@ -149,9 +149,9 @@ global_settings {
   #declare DataTime = int((clock-600)/3);
 #end
 
-#if (clock > 1050)
-  // camera stopped
-  #declare CamClock = 800;
+#if ((clock > 1050) & (clock <= 1450))
+  // circular orbit
+  #declare CamClock = clock - 250;
   #macro CamRadius(Theta_)
     CircleR(Theta_)
   #end
@@ -161,7 +161,20 @@ global_settings {
   // data stopped
   #declare DataTime = 150;
 #end
-// total number of clock steps should be 1150
+
+#if (clock > 1450)
+  // camera stopped
+  #declare CamClock = 1200;
+  #macro CamRadius(Theta_)
+    CircleR(Theta_)
+  #end
+  #macro CamPosition(R_, Theta_, Phi_)
+    CartXYZ(R_, Theta_, Phi_)
+  #end
+  // data stopped
+  #declare DataTime = 150;
+#end
+// total number of clock steps should be 1500
 
 #declare CamDelta = PI/200.0;
 #declare CamTheta = PI/2.0 + CamClock*CamDelta;
@@ -312,7 +325,7 @@ camera {
 
 #if (Moon)
   #declare MoonRotation = clock/60.0;
-  #declare MoonBump = 5.0;
+  #declare MoonBump = 0.5;
   #declare MoonSunAmp = 1.75;
   #declare MoonTex = texture {
     pigment { image_map { jpeg concat(ScriptRoot, "moonmap4k.jpg") once map_type 2 } }

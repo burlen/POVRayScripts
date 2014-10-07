@@ -33,7 +33,7 @@ global_settings {
  * Shperical to Cartesian coordinate conversion. Theta_ is the
  * inclination (rotation about y axis in x-z plane).
  */
-#macro Cart(R_, Theta_, Phi_)
+#macro CartXYZ(R_, Theta_, Phi_)
  <R_*sin(Theta_)*cos(Phi_), R_*sin(Theta_)*sin(Phi_), R_*cos(Theta_)>
 #end
 

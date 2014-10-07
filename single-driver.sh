@@ -1,11 +1,11 @@
 #!/bin/bash
-nsteps=1150
-npar=115
+nsteps=1550
+npar=125
 let npar1=npar-1
 let reps=nsteps/npar
 let reps1=reps-1
 
-export name=green
+export name=red
 export npar=$npar
 export nnodes=`echo $npar/2+1 | bc`
 export ncores=`echo $nnodes*24 | bc`
@@ -26,7 +26,7 @@ echo "pov_ini=$pov_ini"
 echo "out_dir=$out_dir"
 echo "walltime=${walltime}"
 
-for i in `seq 3 $reps1`
+for i in `seq 0 $reps1`
 do
   export base_step=`echo ${i}*${npar} | bc`
   jid=`qsub -v npar,nnodes,ncores,base_step,out_dir,pov_ini -N povray-deniso-${name} -A mpccc -q premium -l walltime=${walltime} -l mppwidth=${ncores} single-driver.qsub`

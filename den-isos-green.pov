@@ -369,7 +369,7 @@ camera {
     #declare IsoF = 0.0;
     #declare IsoT = 0.0;
   #else
-    #declare IsoF = 0.95;
+    #declare IsoF = 0.65;
     #declare IsoT = 0.0;
   #end
 

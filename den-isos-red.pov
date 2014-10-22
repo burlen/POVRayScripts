@@ -36,6 +36,13 @@ global_settings {
 #macro CartXYZ(R_, Theta_, Phi_)
  <R_*sin(Theta_)*cos(Phi_), R_*sin(Theta_)*sin(Phi_), R_*cos(Theta_)>
 #end
+/*
+ * same but this negates z coords so the orbit stays always
+ * on the day side
+ */
+#macro CartXYmZ(R_, Theta_, Phi_)
+ <R_*sin(Theta_)*cos(Phi_), R_*sin(Theta_)*sin(Phi_), -R_*cos(Theta_)>
+#end
 
 #declare DaysideCamera = true;
 #declare HiQ = true;
@@ -378,7 +385,7 @@ camera {
   #declare NeonRed = rgbft <230/255.0, 2/255.0, 63/255.0, IsoF, IsoT>;
   #declare AroraYellow = rgb <222/255.0 198/255.0 92/255.0>;
 
-  #declare IsoColor = NeonRed; // AroraGreen;
+  #declare IsoColor =  NeonRed; // AroraGreen;
   #declare BackLightColor = AroraYellow;
   #declare BackLightPos = -vnormalize(CamPos)*2000.0; //Cart(2000, 0, 0);
   #declare BackLightAt = CamPos;

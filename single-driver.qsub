@@ -15,4 +15,8 @@ echo "base_step=$base_step"
 echo "pov_ini=$pov_ini"
 echo "out_dir=$out_dir"
 
-aprun -b -n $npar -N 2 -S 1 -d 1 -j 2 -cc numa_node python-mpi single-driver.py $base_step $pov_ini $out_dir
+# two procs per node
+#aprun -b -n $npar -N 2 -S 1 -d 1 -j 2 -cc numa_node python-mpi single-driver.py $base_step $pov_ini $out_dir
+
+# 1 proc per node
+aprun -b -n $npar -N 1 -j 2 python-mpi single-driver.py $base_step $pov_ini $out_dir

@@ -12,7 +12,7 @@ pov_ini = sys.argv[2] # os.environ['pov_ini']
 out_dir = sys.argv[3] # os.environ['out_dir']
 
 i = rank + int(base_step)
-nt = 24
+nt = 48
 
 cmd = '%s/povray %s -V -GA +WT%d +K%d +O%s/den-%04d.png'%(pov_prefix,pov_ini,nt,i,out_dir,i)
 

@@ -61,7 +61,7 @@ global_settings {
 #declare Stars = true;
 #declare Earth = true;
 #declare Iso = true;
-#declare IsoOpaque = false;
+#declare IsoOpaque = true;
 #declare Moon = true;
 #declare SunPos = <0,0,-2000>;
 #declare Stereo = true;
@@ -80,13 +80,16 @@ extra pixels = ---------------------------------------
 
 
 /* dresden
+#declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/0001/";
+#declare ScriptRoot = "/home/users/bloring/dipole-run-3/";
 */
-#declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/";
+/* smic
 #declare ScriptRoot = "/work/Documents/SQ/dipole-run3/dipole3-den-isos/";
+*/
 /* edison
+*/
 #declare DataRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-all/0001-pov3-nn/";
 #declare ScriptRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-povray/";
-*/
 /*
  * set the camera angle and data time based on
  * the clock variable to move through the

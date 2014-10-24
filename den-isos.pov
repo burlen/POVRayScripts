@@ -49,12 +49,12 @@ global_settings {
 #declare Atmosph = false;
 #declare Stars = true;
 #declare Earth = true;
-#declare Iso = false;
-#declare IsoOpaque = false;
+#declare Iso = true;
+#declare IsoOpaque = true;
 #declare Moon = true;
 #declare SunPos = <0,0,-2000>;
 /* dresden */
-#declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/";
+#declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/0005/";
 
 /* edison
 #declare DataRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-all/0001-pov3-nn";
@@ -181,7 +181,7 @@ global_settings {
 #declare CamPos = CamPosition(CamRadius(CamTheta), CamTheta, 0);
 #declare CamAngle = 60;
 
-#declare FileName = concat(concat(DataRoot, concat("den-iso-",str(DataTime,-4,0)), "-0001.pov"))
+#declare FileName = concat(concat(DataRoot, concat("den-iso-",str(DataTime,-4,0)), "-0005.pov"))
 
 #warning "---------------------------"
 #warning concat("clock=",str(clock,0,4),"\n")
@@ -383,7 +383,7 @@ camera {
   #declare NeonRed = rgbft <230/255.0, 2/255.0, 63/255.0, IsoF, IsoT>;
   #declare AroraYellow = rgb <222/255.0 198/255.0 92/255.0>;
 
-  #declare IsoColor = AroraGreen; // NeonRed; //
+  #declare IsoColor = AroraGreen; //NeonRed;
   #declare BackLightColor = AroraYellow;
   #declare BackLightPos = -vnormalize(CamPos)*2000.0;
   #declare BackLightAt = CamPos;
@@ -401,6 +401,9 @@ camera {
 
     //light_source { <0,0,-72>, 0.25*BackLightColor }
     //light_source { <0,0, 72>, 0.25*White }
+
+    light_source { CamPos, IsoLightAmp1*White parallel point_at -CamPos }
+    light_source { CamPos, IsoLightAmp2*AroraYellow parallel point_at -CamPos }
 
     light_source { <-IsoLightX, -IsoLightY, -IsoLightZ>, IsoLightAmp1*White }
     light_source { < IsoLightX, -IsoLightY, -IsoLightZ>, IsoLightAmp1*White }

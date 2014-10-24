@@ -64,8 +64,6 @@ global_settings {
 #declare IsoOpaque = true;
 #declare Moon = true;
 #declare SunPos = <0,0,-2000>;
-#declare Stereo = true;
-#declare RightEye = true;
 #declare FocalDistance = 300;
 #declare EyeSep = FocalDistance/30.0;
 
@@ -77,7 +75,6 @@ then trim from left and right side of the respective renderings
 extra pixels = ---------------------------------------
                 2 * focal distance tan(cam angle / 2)
 */
-
 
 /* dresden
 #declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/0001/";

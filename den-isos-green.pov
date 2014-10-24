@@ -28,7 +28,6 @@ global_settings {
 #macro CircleR(Theta_)
   Sense*2000.0
 #end
-
 /*
  * Shperical to Cartesian coordinate conversion. Theta_ is the
  * inclination (rotation about y axis in x-z plane).
@@ -43,6 +42,18 @@ global_settings {
 #macro CartXYmZ(R_, Theta_, Phi_)
  <R_*sin(Theta_)*cos(Phi_), R_*sin(Theta_)*sin(Phi_), -R_*cos(Theta_)>
 #end
+/*
+ * Tangent of a circle used for stereo pair eye offset
+ */
+#macro CircleTan(Theta_)
+  x*cos(Theta_) - z*sin(Theta_)
+#end
+/*
+ * same as above but with snese flipped to stay on dayside
+ */
+#macro CircleTanmX(Theta_)
+  -x*cos(Theta_) - z*sin(Theta_)
+#end
 
 #declare DaysideCamera = true;
 #declare HiQ = true;
@@ -53,13 +64,29 @@ global_settings {
 #declare IsoOpaque = false;
 #declare Moon = true;
 #declare SunPos = <0,0,-2000>;
-/* dresden
-#declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/";
+#declare Stereo = true;
+#declare RightEye = true;
+#declare FocalDistance = 300;
+#declare EyeSep = FocalDistance/30.0;
+
+/*
+add the following number of pixels to the rendered width
+then trim from left and right side of the respective renderings
+
+                      desired width * eye sep
+extra pixels = ---------------------------------------
+                2 * focal distance tan(cam angle / 2)
 */
-/* edison */
+
+
+/* dresden
+*/
+#declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/";
+#declare ScriptRoot = "/work/Documents/SQ/dipole-run3/dipole3-den-isos/";
+/* edison
 #declare DataRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-all/0001-pov3-nn/";
 #declare ScriptRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-povray/";
-
+*/
 /*
  * set the camera angle and data time based on
  * the clock variable to move through the
@@ -74,6 +101,9 @@ global_settings {
   #macro CamPosition(R_, Theta_, Phi_)
     CartXYZ(R_, Theta_, Phi_)
   #end
+  #macro StereoOffset(Theta_)
+    CircleTan(Theta_)*EyeSep/2.0
+  #end
   // no data
   #declare DataTime = -1;
 #end
@@ -86,6 +116,9 @@ global_settings {
   #end
   #macro CamPosition(R_, Theta_, Phi_)
     CartXYZ(R_, Theta_, Phi_)
+  #end
+  #macro StereoOffset(Theta_)
+    CircleTan(Theta_)*EyeSep/2.0
   #end
   // data advances 1:3
   #declare DataTime = int((clock-400)/3);
@@ -101,9 +134,15 @@ global_settings {
     #macro CamPosition(R_, Theta_, Phi_)
       CartXYmZ(R_, Theta_, Phi_)
     #end
+    #macro StereoOffset(Theta_)
+      CircleTanmX(Theta_)*EyeSep/2.0
+    #end
   #else
     #macro CamPosition(R_, Theta_, Phi_)
       CartXYZ(R_, Theta_, Phi_)
+    #end
+    #macro StereoOffset(Theta_)
+      CircleTan(Theta_)*EyeSep/2.0
     #end
   #end
   // data advances 1:3
@@ -119,6 +158,9 @@ global_settings {
   #macro CamPosition(R_, Theta_, Phi_)
     CartXYZ(R_, Theta_, Phi_)
   #end
+  #macro StereoOffset(Theta_)
+    CircleTan(Theta_)*EyeSep/2.0
+  #end
   // data advance 1:3
   #declare DataTime = int((clock-400)/3);
 #end
@@ -131,6 +173,9 @@ global_settings {
   #end
   #macro CamPosition(R_, Theta_, Phi_)
     CartXYZ(R_, Theta_, Phi_)
+  #end
+  #macro StereoOffset(Theta_)
+    CircleTan(Theta_)*EyeSep/2.0
   #end
   // data stopped
   #declare DataTime = 120;
@@ -145,6 +190,9 @@ global_settings {
   #macro CamPosition(R_, Theta_, Phi_)
     CartXYZ(R_, Theta_, Phi_)
   #end
+  #macro StereoOffset(Theta_)
+    CircleTan(Theta_)*EyeSep/2.0
+  #end
   // data advances 1:3
   #declare DataTime = int((clock-600)/3);
 #end
@@ -158,6 +206,9 @@ global_settings {
   #macro CamPosition(R_, Theta_, Phi_)
     CartXYZ(R_, Theta_, Phi_)
   #end
+  #macro StereoOffset(Theta_)
+    CircleTan(Theta_)*EyeSep/2.0
+  #end
   // data stopped
   #declare DataTime = 150;
 #end
@@ -170,6 +221,9 @@ global_settings {
   #end
   #macro CamPosition(R_, Theta_, Phi_)
     CartXYZ(R_, Theta_, Phi_)
+  #end
+  #macro StereoOffset(Theta_)
+    CircleTan(Theta_)*EyeSep/2.0
   #end
   // data stopped
   #declare DataTime = 150;
@@ -193,6 +247,18 @@ global_settings {
 #warning concat("FileName=", FileName)
 #warning "---------------------------"
 */
+
+#if (Stereo)
+  #if (RightEye)
+    #declare CamPos = CamPos + StereoOffset(CamTheta);
+  #else
+    #declare CamPos = CamPos - StereoOffset(CamTheta);
+  #end
+  /*
+  #warning concat("StereoCamPos=",vstr(3, CamPos, ", ", 0,4),"\n")
+  #warning "---------------------------"
+  */
+#end
 
 camera {
   perspective

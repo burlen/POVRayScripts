@@ -58,7 +58,7 @@ global_settings {
 #declare DaysideCamera = true;
 #declare HiQ = true;
 #declare Atmosph = false;
-#declare Stars = true;
+#declare Stars = false;
 #declare Earth = true;
 #declare Iso = true;
 #declare IsoOpaque = true;

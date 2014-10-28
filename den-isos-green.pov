@@ -23,10 +23,10 @@ global_settings {
 #end
 /*
  * Radius of a circle that matches up with the above
- * Archimedian spiral at Theta of 7*pi/2.
+ * Archimedian spiral at given angle
  */
 #macro CircleR(Theta_)
-  Sense*2000.0
+  ArchSpiralR(9.0*PI/2.0)
 #end
 /*
  * Shperical to Cartesian coordinate conversion. Theta_ is the
@@ -49,7 +49,7 @@ global_settings {
   x*cos(Theta_) - z*sin(Theta_)
 #end
 /*
- * same as above but with snese flipped to stay on dayside
+ * same as above but with sense flipped to stay on dayside
  */
 #macro CircleTanmX(Theta_)
   -x*cos(Theta_) - z*sin(Theta_)
@@ -64,8 +64,6 @@ global_settings {
 #declare IsoOpaque = true;
 #declare Moon = true;
 #declare SunPos = <0,0,-2000>;
-#declare FocalDistance = 300;
-#declare EyeSep = FocalDistance/30.0;
 
 /*
 add the following number of pixels to the rendered width
@@ -74,19 +72,24 @@ then trim from left and right side of the respective renderings
                       desired width * eye sep
 extra pixels = ---------------------------------------
                 2 * focal distance tan(cam angle / 2)
+
+for width of 1440 and view angle of 60 extra pixels is 42
+for width of 1920 and view angle of 78 extra pixels is 40
 */
+#declare FocalDistance = 300;
+#declare EyeSep = FocalDistance/30.0;
 
 /* dresden
+*/
 #declare DataRoot = "/home/users/bloring/data/dipole3-den-isos-all/pov-mesh3/0001/";
 #declare ScriptRoot = "/home/users/bloring/dipole-run-3/";
-*/
 /* smic
 #declare ScriptRoot = "/work/Documents/SQ/dipole-run3/dipole3-den-isos/";
 */
 /* edison
-*/
 #declare DataRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-all/0001-pov3-nn/";
 #declare ScriptRoot = "/scratch3/scratchdirs/loring/dipole3-den-isos-povray/";
+*/
 /*
  * set the camera angle and data time based on
  * the clock variable to move through the
@@ -166,10 +169,10 @@ extra pixels = ---------------------------------------
 #end
 
 #if ((clock > 760) & (clock <= 960))
-  // circular orbit
+  // archimedian orbit
   #declare CamClock = clock - 160;
   #macro CamRadius(Theta_)
-    CircleR(Theta_)
+    ArchSpiralR(Theta_)
   #end
   #macro CamPosition(R_, Theta_, Phi_)
     CartXYZ(R_, Theta_, Phi_)
@@ -233,8 +236,14 @@ extra pixels = ---------------------------------------
 #declare CamDelta = PI/200.0;
 #declare CamTheta = PI/2.0 + CamClock*CamDelta;
 #declare CamPos = CamPosition(CamRadius(CamTheta), CamTheta, 0);
-#declare CamAngle = 60;
+#if (image_width >= 1920)
+  #declare CamAngle = 78;
+#else
+  #declare CamAngle = 60.0;
+#end
 
+/* Note: DataTime goes to 150 rather than 170 because
+   20 steps got purged from BlueWaters during the sim */
 #declare FileName = concat(concat(DataRoot, concat("den-iso-",str(DataTime,-4,0)), "-0001.pov"))
 
 /*
@@ -248,6 +257,10 @@ extra pixels = ---------------------------------------
 #warning "---------------------------"
 */
 
+/* apply stereo offset to camera position */
+#ifndef (Stereo)
+  #declare Stereo = false;
+#end
 #if (Stereo)
   #if (RightEye)
     #declare CamPos = CamPos + StereoOffset(CamTheta);

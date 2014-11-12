@@ -4,12 +4,15 @@ import os
 import sys
 rank = mpi.COMM_WORLD.Get_rank()
 nproc = mpi.COMM_WORLD.Get_size()
-prefix='/usr/common/graphics/povray/3.7.0/bin/' #'/work/apps/povray/bin/'
-ini='/scratch1/scratchdirs/loring/pov-pr/scene.ini' #'/work2/xct/data/crystal/pov-pr/scene.ini'
+prefix='/usr/common/graphics/povray/3.7.0/bin/'
+ini='/scratch1/scratchdirs/loring/pov-pr/scene.ini'
 k=float(rank)/float(nproc)
 i=rank
 nt=24
-cmd = '%s/povray %s -V -GA +WT%d +K%0.6f +Oinn-%04d.png'%(prefix,ini,nt,k,i)
-sys.stderr.write('=====%d %s\n'%(rank,cmd))
-os.system(cmd)
+cmd_l = '%s/povray %s[stereo_l] -V -GA +WT%d +K%0.6f +Oinn-%04d-l.png'%(prefix,ini,nt,k,i)
+sys.stderr.write('=====%d %s\n'%(rank,cmd_l))
+os.system(cmd_l)
+cmd_r = '%s/povray %s[stereo_r] -V -GA +WT%d +K%0.6f +Oinn-%04d-r.png'%(prefix,ini,nt,k,i)
+sys.stderr.write('=====%d %s\n'%(rank,cmd_r))
+os.system(cmd_r)
 sys.stderr.write('=====%d complete!\n'%(rank))

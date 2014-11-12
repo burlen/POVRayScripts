@@ -68,19 +68,39 @@ cone { z*10,1 z*10+z*3,0 finish {AxesFinish } pigment { color Blue } }
 #declare CamDir = CamPos/vlength(CamPos);
 #declare DomeRot = <degrees(acos(CamDir.y)), degrees(acos(CamDir.z))>;
 
+#declare FocalDistance = 50;
+#declare EyeSep = FocalDistance/30.0;
+
+/*
+add the following number of pixels to the rendered width
+then trim from left and right side of the respective renderings
+
+                      desired width * eye sep
+extra pixels = ---------------------------------------
+                2 * focal distance tan(cam angle / 2)
+*/
+
+#if (Stereo)
+  #if (RightEye)
+    #declare CamPos = CamPos + CamRight*EyeSep/2.0;
+  #else
+    #declare CamPos = CamPos - CamRight*EyeSep/2.0;
+  #end
+  #warning concat("StereoCamPos=",vstr(3, CamPos, ", ", 0,4),"\n")
+  #warning "---------------------------"
+  /*
+  */
+#end
 
 camera {
   //orthographic
 	perspective
-	location CamPos //<-26.244181, -0.687544, 69>
-  //right -x*Aspect
-	sky CamUp //sky <0.000000, 1.000000, 0.000000>
-	right CamRight*Aspect // <-1, 0, 0>*Aspect
-	//direction CamAt //look_at <112.776841, 1.600235, 69>
+	location CamPos
+	sky CamUp
+	right CamRight*Aspect
 	angle HViewAngle
-  look_at CamAt
+    look_at CamAt
 }
-
 
 // --------------------------------------------------------------------------
 // background

@@ -5,7 +5,7 @@ import sys
 rank = mpi.COMM_WORLD.Get_rank()
 nproc = mpi.COMM_WORLD.Get_size()
 prefix='/usr/common/graphics/povray/3.7.0/bin/'
-ini='/scratch1/scratchdirs/loring/pov-pr/scene.ini'
+ini='scene.ini'
 k=float(rank)/float(nproc)
 i=rank
 nt=24

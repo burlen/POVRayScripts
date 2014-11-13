@@ -122,14 +122,18 @@ camera {
 #if (MakeMask)
     background { color White }
 #else
-    #declare BG1 = rgb <154,154,154>/255; //rgb <255 255 255>/255.0;
-    #declare BG2 = rgb <154,154,154>/255; //rgb <30 30 30>/255.0;
+    #declare BG1 = rgb <173/255 173/255 173/255>;
+    #declare BG2 = rgb <45/255 45/255 45/255>;
+    //#declare BG1 = rgb <154,154,154>/255; //rgb <255 255 255>/255.0;
+    //#declare BG2 = rgb <154,154,154>/255; //rgb <30 30 30>/255.0;
     sky_sphere {
     pigment {
         gradient y
         color_map {
             [0.0 color BG2]
-            [0.0041 color BG1]
+            [0.08 color BG1]
+    //        [0.0 color BG2]
+      //      [0.0041 color BG1]
             }
         scale 2
         translate -1
@@ -156,9 +160,9 @@ object {
 // lights
 #declare AxialRotate = true;
 #declare HiQ = true;
-#declare FinalIso = false;
+#declare FinalIso = true;
 #declare MultipleDen = true;
-#declare UseFog = true;
+#declare UseFog = false;
 #declare TestFog = false;
 #declare SampleMethod = 2;
 #if (MakeMask)

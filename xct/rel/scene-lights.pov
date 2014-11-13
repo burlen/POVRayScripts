@@ -25,7 +25,7 @@
 }
 
 
-#declare DownLightR = 40:
+#declare DownLightR = 40;
 #declare DownLightPhi = Phi + pi/2.0;
 #declare DownLightPos = <DownLightR*sin(Theta)*cos(DownLightPhi), DownLightR*sin(Theta)*sin(DownLightPhi), DownLightR*cos(Theta)> + Center;
 #declare DownLightDim = 0.95;
@@ -162,7 +162,7 @@
 
 #declare UpLight00 = light_source {
    -1*DownLightPos
-    <15.6,-40,69>
+    //<15.6,-40,69>
     color CrystalLightColor*0.35
     parallel
     point_at LightAt
